@@ -1,0 +1,72 @@
+{
+  "name": "novel-forge-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-assisted novel idea organizer and writing workspace demo.",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "node server.js",
+    "electron": "electron .",
+    "build": "electron-builder",
+    "build:portable": "electron-builder --win portable",
+    "build:nsis": "electron-builder --win nsis",
+    "check": "node --check app.js && node --check server.js && node --check electron-main.js"
+  },
+  "keywords": [
+    "novel",
+    "writing",
+    "ai",
+    "organizer"
+  ],
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.moxia.novelforge",
+    "productName": "墨匣",
+    "asar": true,
+    "files": [
+      "electron-main.js",
+      "server.js",
+      "app.js",
+      "index.html",
+      "styles.css",
+      "docs/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-${arch}-${ext}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "墨匣",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
+  }
+}
