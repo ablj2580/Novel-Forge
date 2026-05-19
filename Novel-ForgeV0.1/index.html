@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f3ea" />
+    <title>墨匣 | 小说创意整理台</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="主导航">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">墨</div>
+          <div>
+            <strong>墨匣</strong>
+            <span>创意整理台</span>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <button class="nav-item active" data-view="workspace" type="button">
+            <span aria-hidden="true">⌘</span>
+            工作台
+          </button>
+          <button class="nav-item" data-view="books" type="button">
+            <span aria-hidden="true">▤</span>
+            书库
+          </button>
+          <button class="nav-item" data-view="inbox" type="button">
+            <span aria-hidden="true">✎</span>
+            灵感收件箱
+          </button>
+          <button class="nav-item" data-view="library" type="button">
+            <span aria-hidden="true">▦</span>
+            设定资料库
+          </button>
+          <button class="nav-item" data-view="relation" type="button">
+            <span aria-hidden="true">☷</span>
+            关系图谱
+          </button>
+          <button class="nav-item" data-view="writing" type="button">
+            <span aria-hidden="true">¶</span>
+            正文写作
+          </button>
+        </nav>
+
+        <section class="book-panel">
+          <div class="section-title">当前作品</div>
+          <div id="bookSelect" class="book-select-list" aria-label="选择当前作品"></div>
+        </section>
+        <button id="newBookButton" class="ghost-button book-panel-button" type="button">新建作品</button>
+
+        <section class="sidebar-footer">
+          <button id="apiButton" class="ghost-button" type="button">AI 接口设置</button>
+          <button id="exportButton" class="ghost-button" type="button">导出备份</button>
+          <label class="import-button">
+            导入备份
+            <input id="importInput" type="file" accept="application/json" />
+          </label>
+          <button id="settingsButton" class="ghost-button" type="button" data-view="settings">设置</button>
+        </section>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Novel Forge Demo</p>
+            <h1 id="pageTitle">工作台</h1>
+          </div>
+          <div class="topbar-actions">
+            <div class="search-wrapper">
+              <div class="search-container">
+                <input id="searchInput" type="search" placeholder="搜索人物、金手指、伏笔或章节" />
+                <button id="searchButton" class="search-button" type="button">⌕</button>
+                <button id="clearSearchButton" class="clear-search-button" type="button">✕</button>
+              </div>
+              <div id="searchSuggestions" class="search-suggestions"></div>
+            </div>
+            <button id="quickReviewButton" class="primary-button" type="button">整理新灵感</button>
+          </div>
+        </header>
+
+        <section id="booksView" class="view" aria-labelledby="pageTitle">
+          <div class="books-layout">
+            <section class="book-grid-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Books</p>
+                  <h2>书库</h2>
+                </div>
+                <button id="newBookButtonMain" class="primary-button" type="button">新建作品</button>
+              </div>
+              <div id="bookGrid" class="book-grid"></div>
+            </section>
+
+            <aside class="book-detail-panel">
+              <p class="eyebrow">Current Book</p>
+              <div id="bookDetail" class="book-detail"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="workspaceView" class="view active" aria-labelledby="pageTitle">
+          <div class="workspace-grid">
+            <section class="capture-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Quick Capture</p>
+                  <h2>随手写入</h2>
+                </div>
+                <span id="aiModeBadge" class="status-pill">本地规则</span>
+              </div>
+              <input id="ideaTitleInput" class="title-input" type="text" placeholder="给这条想法起个短标题" />
+              <textarea id="ideaContentInput" placeholder="把灵感直接丢进来，例如：主角的金手指是把失败变成经验，代价是会遗忘一次温柔的记忆。"></textarea>
+              <div class="capture-actions">
+                <button id="saveIdeaButton" class="primary-button" type="button">保存到收件箱</button>
+                <button id="saveAndReviewButton" class="secondary-button" type="button">保存并 AI 审阅</button>
+              </div>
+              <p class="helper-text">支持用 @书名 指定归属，例如：@长夜烬明 这个金手指的代价是失去一段记忆。</p>
+            </section>
+
+            <section class="stats-panel">
+              <div class="stat-card">
+                <span>作品</span>
+                <strong id="bookCount">0</strong>
+              </div>
+              <div class="stat-card">
+                <span>待整理</span>
+                <strong id="inboxCount">0</strong>
+              </div>
+              <div class="stat-card">
+                <span>资料条目</span>
+                <strong id="libraryCount">0</strong>
+              </div>
+              <div class="stat-card">
+                <span>正文字数</span>
+                <strong id="wordCount">0</strong>
+              </div>
+            </section>
+
+            <section class="review-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">AI Review Queue</p>
+                  <h2>待确认建议</h2>
+                </div>
+                <button id="reviewAllButton" class="text-button" type="button">审阅全部</button>
+              </div>
+              <div id="suggestionList" class="suggestion-list"></div>
+            </section>
+
+            <section class="timeline-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Recent</p>
+                  <h2>最近活动</h2>
+                </div>
+              </div>
+              <div id="activityList" class="activity-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="inboxView" class="view" aria-labelledby="pageTitle">
+          <div class="split-layout">
+            <section>
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Inbox</p>
+                  <h2>灵感收件箱</h2>
+                </div>
+                <button id="inboxReviewButton" class="secondary-button" type="button">批量审阅</button>
+              </div>
+              <div id="inboxList" class="note-list"></div>
+            </section>
+            <aside class="detail-panel">
+              <p class="eyebrow">Selected Note</p>
+              <div id="noteDetail" class="empty-state">选择一条灵感查看详情。</div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="libraryView" class="view" aria-labelledby="pageTitle">
+          <div class="library-layout">
+            <aside>
+              <div class="module-tabs" id="moduleTabs"></div>
+              <div id="libraryFavoriteToggle" class="library-favorite-toggle"></div>
+            </aside>
+            <section>
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Library</p>
+                  <h2 id="moduleTitle">资料库</h2>
+                </div>
+                <button id="newLibraryItemButton" class="secondary-button" type="button">手动新增</button>
+              </div>
+              <div id="libraryList" class="library-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="relationView" class="view" aria-labelledby="pageTitle"></section>
+
+        <section id="writingView" class="view" aria-labelledby="pageTitle">
+          <div class="writing-layout">
+            <aside class="chapter-list-panel">
+              <div class="panel-heading compact">
+                <h2>章节</h2>
+                <button id="newChapterButton" class="icon-button" title="新建章节" type="button">+</button>
+              </div>
+              <div id="chapterList" class="chapter-list"></div>
+            </aside>
+            <section class="editor-panel">
+              <div class="chapter-title-wrapper">
+                <input id="chapterTitleInput" class="chapter-title" type="text" placeholder="章节标题" />
+                <button id="enterFocusModeButton" class="focus-mode-toggle" title="进入沉浸写作" data-action="enter-focus-mode" type="button">⛶</button>
+              </div>
+              <div class="editor-wrapper">
+                <div id="chapterBodyInput" class="chapter-body" contenteditable="true" data-placeholder="开始写正文。右侧会显示当前作品的设定、伏笔和相关素材。"></div>
+              </div>
+              <div class="editor-footer">
+                <span id="chapterWordCount">0 字</span>
+                <span id="saveState">已自动保存</span>
+              </div>
+            </section>
+            <aside class="reference-panel">
+              <div class="panel-heading compact">
+                <h2>相关设定</h2>
+                <button id="refreshReferencesButton" class="icon-button" title="刷新引用" type="button">↻</button>
+              </div>
+              <div id="referenceModuleFilter" class="reference-filter"></div>
+              <div id="referenceList" class="reference-list"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="settingsView" class="view" aria-labelledby="pageTitle">
+          <div id="settingsContent"></div>
+        </section>
+
+        <section id="focusView" class="view focus-mode" aria-labelledby="pageTitle">
+          <button id="focusChaptersButton" class="focus-toggle-button focus-toggle-left" title="章节导航" type="button">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <button id="focusReferencesButton" class="focus-toggle-button focus-toggle-right" title="设定参考" type="button">
+            <span aria-hidden="true">▤</span>
+          </button>
+          
+          <aside id="focusChaptersPanel" class="focus-slide-panel focus-slide-left">
+            <div class="panel-heading compact">
+              <h2>章节</h2>
+              <button id="focusNewChapterButton" class="icon-button" title="新建章节" type="button">+</button>
+            </div>
+            <div id="focusChapterList" class="chapter-list"></div>
+            <div class="focus-exit-section">
+              <button id="exitFocusModeButton" class="ghost-button" type="button">退出沉浸写作</button>
+            </div>
+          </aside>
+          
+          <section class="focus-editor-panel">
+            <input id="focusChapterTitleInput" class="focus-chapter-title" type="text" placeholder="章节标题" />
+            <div id="focusChapterBodyInput" class="focus-chapter-body" contenteditable="true" data-placeholder="开始写正文..."></div>
+            <div class="focus-editor-footer">
+              <span id="focusChapterWordCount">0 字</span>
+              <span id="focusSaveState">已自动保存</span>
+            </div>
+          </section>
+          
+          <aside id="focusReferencesPanel" class="focus-slide-panel focus-slide-right">
+            <div class="panel-heading compact">
+              <h2>相关设定</h2>
+              <button id="focusRefreshReferencesButton" class="icon-button" title="刷新引用" type="button">↻</button>
+            </div>
+            <div id="focusReferenceModuleFilter" class="reference-filter"></div>
+            <div id="focusReferenceList" class="reference-list"></div>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="bookDialog" class="modal">
+      <form method="dialog" id="bookForm">
+        <div class="modal-heading">
+          <h2>新建作品</h2>
+          <button class="icon-button" value="cancel" type="submit">×</button>
+        </div>
+        <label>
+          书名
+          <input id="bookTitleInput" required type="text" placeholder="例如：长夜烬明" />
+        </label>
+        <label>
+          类型
+          <input id="bookGenreInput" type="text" placeholder="玄幻、都市、科幻、言情..." />
+        </label>
+        <div class="form-grid">
+          <label>
+            状态
+            <select id="bookStatusInput">
+              <option value="planning">规划中</option>
+              <option value="active">进行中</option>
+              <option value="paused">暂停</option>
+              <option value="finished">完结</option>
+            </select>
+          </label>
+          <label>
+            书目颜色
+            <input id="bookColorInput" type="color" value="#41634d" />
+          </label>
+        </div>
+        <label>
+          一句话核心
+          <textarea id="bookPremiseInput" placeholder="这本书最想写的冲突、爽点或情绪。"></textarea>
+        </label>
+        <button class="primary-button" value="default" type="submit">创建</button>
+      </form>
+    </dialog>
+
+    <dialog id="apiDialog" class="modal wide">
+      <form method="dialog" id="apiForm">
+        <div class="modal-heading">
+          <h2>AI 接口设置</h2>
+          <button class="icon-button" value="cancel" type="submit">×</button>
+        </div>
+        <div class="form-grid">
+          <label>
+            接口地址
+            <input id="apiEndpointInput" type="url" placeholder="https://api.deepseek.com/chat/completions" />
+          </label>
+          <label>
+            模型
+            <input id="apiModelInput" type="text" placeholder="deepseek-v4-flash" />
+          </label>
+        </div>
+        <label>
+          API Key
+          <input id="apiKeyInput" type="password" placeholder="仅保存在当前浏览器本地存储" />
+        </label>
+        <label>
+          分类提示词
+          <textarea id="apiPromptInput"></textarea>
+        </label>
+        <div class="modal-actions">
+          <button id="testApiButton" class="secondary-button" type="button">测试连接</button>
+          <button class="primary-button" value="default" type="submit">保存设置</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="manualItemDialog" class="modal">
+      <form method="dialog" id="manualItemForm">
+        <div class="modal-heading">
+          <h2>新增资料</h2>
+          <button class="icon-button" value="cancel" type="submit">×</button>
+        </div>
+        <label>
+          标题
+          <input id="manualItemTitleInput" required type="text" />
+        </label>
+        <label>
+          内容
+          <textarea id="manualItemContentInput" required></textarea>
+        </label>
+        <label>
+          标签
+          <input id="manualItemTagsInput" type="text" placeholder="用逗号分隔" />
+        </label>
+        <button class="primary-button" value="default" type="submit">加入资料库</button>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

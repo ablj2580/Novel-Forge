@@ -1,0 +1,583 @@
+/* =========================================================================
+   墨匣 · 移动端样式
+   --------------------------------------------------------------------------
+   - 引用共享 token (../src/tokens.css)
+   - 单列、底部 tab bar、触摸优先、安全区适配
+   - 类名以 .m- 前缀,避免和桌面端冲突
+   ========================================================================= */
+
+@import url('../src/tokens.css');
+
+/* ---------- 1. 基础 ----------------------------------------------------- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; height: 100%; }
+
+html {
+  /* 禁止 iOS 横向滚动跳动 + 长按字符菜单 */
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-15);
+  color: var(--ink-0);
+  background-color: var(--paper-0);
+  background-image:
+    radial-gradient(rgba(120, 90, 50, 0.045) 1px, transparent 1px),
+    radial-gradient(rgba(120, 90, 50, 0.035) 1px, transparent 1px);
+  background-size: 6px 6px, 11px 11px;
+  background-position: 0 0, 3px 5px;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--ink-0);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ---------- 2. 应用骨架(顶栏 + 主区 + 底栏) -------------------------- */
+
+.m-app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ---------- 3. 顶栏 ----------------------------------------------------- */
+
+.m-topbar {
+  display: grid;
+  grid-template-columns: var(--h-touch) 1fr var(--h-touch);
+  align-items: center;
+  gap: var(--sp-2);
+  padding: calc(env(safe-area-inset-top, 0px) + var(--sp-2)) var(--sp-3) var(--sp-2);
+  background: var(--paper-2);
+  border-bottom: 1px solid var(--rule-0);
+  position: relative;
+}
+
+.m-topbar::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -3px;
+  height: 1px;
+  background: var(--rule-2);
+}
+
+.m-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.m-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  background: var(--seal);
+  color: var(--paper-2);
+  font-family: var(--font-serif);
+  font-size: var(--fs-16);
+  font-weight: 700;
+  border-radius: var(--r-1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.m-title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-18);
+  letter-spacing: 0.16em;
+  color: var(--ink-0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.m-icon-button {
+  display: grid;
+  place-items: center;
+  width: var(--h-touch);
+  height: var(--h-touch);
+  border-radius: var(--r-2);
+  background: transparent;
+  color: var(--ink-2);
+  font-size: var(--fs-20);
+  font-family: var(--font-serif);
+}
+
+.m-icon-button:active {
+  background: var(--seal-soft);
+  color: var(--seal);
+}
+
+/* ---------- 4. 主区(视图容器) ---------------------------------------- */
+
+.m-main {
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--sp-4);
+  padding-bottom: calc(var(--sp-4) + 8px);
+}
+
+.m-view { display: none; }
+.m-view.active { display: block; }
+
+/* ---------- 5. 空状态(骨架占位) -------------------------------------- */
+
+.m-empty-state {
+  display: grid;
+  place-items: center;
+  gap: var(--sp-3);
+  min-height: 60vh;
+  padding: var(--sp-7) var(--sp-4);
+  text-align: center;
+  color: var(--ink-2);
+}
+
+.m-empty-icon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule-1);
+  border-radius: 50%;
+  font-family: var(--font-serif);
+  font-size: var(--fs-32);
+  color: var(--bronze);
+  background: var(--paper-2);
+}
+
+.m-empty-state p {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--fs-18);
+  letter-spacing: 0.16em;
+  color: var(--ink-1);
+}
+
+.m-empty-hint {
+  font-size: var(--fs-13) !important;
+  letter-spacing: 0.04em !important;
+  color: var(--ink-3) !important;
+  line-height: 1.8;
+}
+
+/* ---------- 6. "更多" 页设置列表 -------------------------------------- */
+
+.m-list {
+  display: grid;
+  gap: 1px;
+  background: var(--rule-2);
+  border: 1px solid var(--rule-0);
+  border-radius: var(--r-3);
+  overflow: hidden;
+}
+
+.m-list-item {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 56px;
+  padding: 0 var(--sp-4);
+  background: var(--paper-2);
+  text-align: left;
+  color: var(--ink-0);
+  font-family: var(--font-serif);
+  font-size: var(--fs-15);
+  letter-spacing: 0.06em;
+}
+
+.m-list-item:active {
+  background: var(--seal-soft);
+  color: var(--seal-deep);
+}
+
+.m-list-icon {
+  display: grid;
+  place-items: center;
+  color: var(--bronze);
+  font-size: var(--fs-18);
+  font-family: var(--font-serif);
+}
+
+.m-list-label { min-width: 0; }
+
+.m-list-chevron {
+  color: var(--ink-4);
+  font-size: var(--fs-20);
+  font-family: var(--font-serif);
+}
+
+.m-version {
+  margin-top: var(--sp-6);
+  padding: var(--sp-3);
+  text-align: center;
+  color: var(--ink-3);
+  font-family: var(--font-serif);
+  font-size: var(--fs-12);
+  letter-spacing: 0.18em;
+}
+
+/* ---------- 7. 底部 tab bar -------------------------------------------- */
+
+.m-tabbar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--paper-1);
+  border-top: 1px solid var(--rule-0);
+  position: relative;
+}
+
+.m-tabbar::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -3px;
+  height: 1px;
+  background: var(--rule-2);
+}
+
+.m-tab {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 3px;
+  min-height: 56px;
+  padding: 6px 0;
+  background: transparent;
+  color: var(--ink-3);
+  position: relative;
+}
+
+.m-tab-icon {
+  font-family: var(--font-serif);
+  font-size: var(--fs-18);
+  line-height: 1;
+  color: var(--ink-3);
+}
+
+.m-tab-label {
+  font-family: var(--font-serif);
+  font-size: var(--fs-11);
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+
+.m-tab:active { background: var(--seal-soft); }
+
+.m-tab.active,
+.m-tab.active .m-tab-icon,
+.m-tab.active .m-tab-label { color: var(--seal); }
+
+.m-tab.active::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--seal);
+}
+
+/* ---------- 8. 左侧抽屉(由 ≡ 触发,从左滑出) ------------------------- */
+
+.m-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  background: rgba(28, 22, 18, 0.42);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.32s ease, visibility 0s 0.32s;
+}
+
+.m-drawer-backdrop.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.32s ease;
+}
+
+.m-drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 200;
+  width: min(84%, 320px);
+  display: flex;
+  flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background-color: var(--paper-1);
+  background-image:
+    radial-gradient(rgba(120, 90, 50, 0.045) 1px, transparent 1px);
+  background-size: 6px 6px;
+  border-right: 1px solid var(--rule-0);
+  box-shadow: 8px 0 32px rgba(60, 42, 22, 0.18);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transform: translateX(-100%);
+  transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.m-drawer.open {
+  transform: translateX(0);
+}
+
+/* --- 抽屉:品牌头部 --- */
+.m-drawer-brand {
+  display: grid;
+  grid-template-columns: 44px 1fr var(--h-touch);
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-4) var(--sp-3);
+  border-bottom: 1px solid var(--rule-0);
+  position: relative;
+}
+
+.m-drawer-brand::after {
+  content: "";
+  position: absolute;
+  left: var(--sp-4); right: var(--sp-4); bottom: -3px;
+  height: 1px;
+  background: var(--rule-2);
+}
+
+.m-drawer-mark {
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+  border-radius: var(--r-1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+              inset 0 0 0 3px var(--seal);
+}
+
+.m-drawer-name { display: grid; gap: 2px; min-width: 0; }
+
+.m-drawer-name strong {
+  font-family: var(--font-serif);
+  font-size: var(--fs-18);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ink-0);
+}
+
+.m-drawer-name span {
+  font-family: var(--font-sans);
+  font-size: var(--fs-11);
+  letter-spacing: 0.24em;
+  color: var(--ink-3);
+}
+
+/* --- 抽屉:导航列表 --- */
+.m-drawer-nav {
+  display: grid;
+  gap: 2px;
+  padding: var(--sp-3) var(--sp-3);
+  border-bottom: 1px solid var(--rule-2);
+}
+
+.m-drawer-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: var(--h-touch);
+  padding: 0 var(--sp-3);
+  border-radius: var(--r-2);
+  text-align: left;
+  font-family: var(--font-serif);
+  font-size: var(--fs-15);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--ink-1);
+  background: transparent;
+  position: relative;
+}
+
+.m-drawer-item-icon {
+  text-align: center;
+  font-family: var(--font-serif);
+  color: var(--ink-3);
+  font-size: var(--fs-15);
+}
+
+.m-drawer-item:active,
+.m-drawer-item:hover {
+  background: rgba(179, 50, 42, 0.06);
+  color: var(--seal-deep);
+}
+
+.m-drawer-item.active {
+  background: var(--seal-soft);
+  color: var(--seal-deep);
+}
+
+.m-drawer-item.active .m-drawer-item-icon { color: var(--seal); }
+
+.m-drawer-item.active::before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 8px; bottom: 8px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--seal);
+}
+
+/* --- 抽屉:当前作品段 --- */
+.m-drawer-section {
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-3) var(--sp-3);
+  border-bottom: 1px solid var(--rule-2);
+}
+
+.m-drawer-section-title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-12);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  color: var(--ink-3);
+  padding: 0 var(--sp-2);
+}
+
+.m-drawer-section-title::first-letter {
+  color: var(--bronze);
+  margin-right: 4px;
+}
+
+.m-drawer-book-list {
+  display: grid;
+  gap: 2px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.m-drawer-book-empty {
+  padding: var(--sp-4) var(--sp-3);
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: var(--fs-13);
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  border: 1px dashed var(--rule-2);
+  border-radius: var(--r-2);
+}
+
+.m-drawer-book-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-2);
+  border: 1px solid transparent;
+  border-radius: var(--r-2);
+  cursor: pointer;
+  background: transparent;
+  text-align: left;
+}
+
+.m-drawer-book-item:active,
+.m-drawer-book-item:hover {
+  background: var(--paper-3);
+  border-color: var(--rule-2);
+}
+
+.m-drawer-book-item.active {
+  background: var(--paper-3);
+  border-color: var(--rule-1);
+  box-shadow: inset 2px 0 0 var(--seal);
+}
+
+/* --- 抽屉:通用动作按钮(新建 / 导入 / 导出 / 设置) --- */
+.m-drawer-action {
+  width: 100%;
+  min-height: var(--h-touch);
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--rule-0);
+  border-radius: var(--r-2);
+  background: var(--paper-3);
+  color: var(--ink-1);
+  font-family: var(--font-serif);
+  font-size: var(--fs-14);
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.m-drawer-action:active,
+.m-drawer-action:hover {
+  background: var(--paper-2);
+  border-color: var(--ink-3);
+  color: var(--ink-0);
+}
+
+.m-drawer-new-book { margin-top: var(--sp-2); }
+
+.m-drawer-footer {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-3) calc(var(--sp-4) + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--rule-2);
+}
+
+.m-drawer-footer .m-drawer-action {
+  font-size: var(--fs-13);
+}
+
+/* ---------- 9. Toast --------------------------------------------------- */
+
+.m-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  transform: translate(-50%, 12px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--ink-0);
+  color: var(--paper-2);
+  border-radius: var(--r-3);
+  font-family: var(--font-serif);
+  font-size: var(--fs-13);
+  letter-spacing: 0.08em;
+  box-shadow: var(--shadow-3);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.m-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
