@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f7f1e1" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>墨匣 · 移动版</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- 左侧抽屉(从左滑出)+ 遮罩 -->
+    <div id="mDrawerBackdrop" class="m-drawer-backdrop" aria-hidden="true"></div>
+    <aside id="mDrawer" class="m-drawer" aria-hidden="true" aria-label="主菜单">
+      <header class="m-drawer-brand">
+        <div class="m-brand-mark m-drawer-mark" aria-hidden="true">墨</div>
+        <div class="m-drawer-name">
+          <strong>墨匣</strong>
+          <span>创意整理台</span>
+        </div>
+        <button id="mDrawerClose" class="m-icon-button" type="button" aria-label="关闭菜单">×</button>
+      </header>
+
+      <nav class="m-drawer-nav" aria-label="主导航">
+        <button class="m-drawer-item active" data-view="workspace" type="button">
+          <span class="m-drawer-item-icon" aria-hidden="true">⌘</span><span>工作台</span>
+        </button>
+        <button class="m-drawer-item" data-view="books" type="button">
+          <span class="m-drawer-item-icon" aria-hidden="true">▤</span><span>书库</span>
+        </button>
+        <button class="m-drawer-item" data-view="inbox" type="button">
+          <span class="m-drawer-item-icon" aria-hidden="true">✎</span><span>灵感收件箱</span>
+        </button>
+        <button class="m-drawer-item" data-view="library" type="button">
+          <span class="m-drawer-item-icon" aria-hidden="true">▦</span><span>设定资料库</span>
+        </button>
+        <button class="m-drawer-item" data-view="relation" type="button">
+          <span class="m-drawer-item-icon" aria-hidden="true">☷</span><span>关系图谱</span>
+        </button>
+        <button class="m-drawer-item" data-view="writing" type="button">
+          <span class="m-drawer-item-icon" aria-hidden="true">¶</span><span>正文写作</span>
+        </button>
+      </nav>
+
+      <section class="m-drawer-section">
+        <div class="m-drawer-section-title">❖ 当前作品</div>
+        <div id="mDrawerBookList" class="m-drawer-book-list">
+          <!-- 占位 — 接入 state.js 后渲染书目列表 -->
+          <div class="m-drawer-book-empty">暂无作品</div>
+        </div>
+        <button id="mDrawerNewBook" class="m-drawer-action m-drawer-new-book" type="button">新建作品</button>
+      </section>
+
+      <footer class="m-drawer-footer">
+        <button class="m-drawer-action" data-target="api" type="button">AI 接口设置</button>
+        <button class="m-drawer-action" data-target="export" type="button">导出备份</button>
+        <button class="m-drawer-action" data-target="import" type="button">导入备份</button>
+        <button class="m-drawer-action" data-target="settings" type="button">设置</button>
+      </footer>
+    </aside>
+
+    <div class="m-app">
+      <header class="m-topbar">
+        <button id="mLeftAction" class="m-icon-button" type="button" aria-label="打开菜单">≡</button>
+        <div class="m-title-wrap">
+          <div class="m-brand-mark" aria-hidden="true">墨</div>
+          <h1 id="mPageTitle" class="m-title">工作台</h1>
+        </div>
+        <button id="mRightAction" class="m-icon-button" type="button" aria-label="操作">⌕</button>
+      </header>
+
+      <main class="m-main">
+        <section id="mWorkspaceView" class="m-view active" data-view="workspace">
+          <div class="m-empty-state">
+            <div class="m-empty-icon">⌘</div>
+            <p>移动端工作台</p>
+            <p class="m-empty-hint">这里将放置:作品速览 / 随手写入 / 待审阅条目。<br />正在搭建中。</p>
+          </div>
+        </section>
+
+        <section id="mWritingView" class="m-view" data-view="writing">
+          <div class="m-empty-state">
+            <div class="m-empty-icon">¶</div>
+            <p>移动端写作</p>
+            <p class="m-empty-hint">全屏沉浸 + 章节切换抽屉。<br />正在搭建中。</p>
+          </div>
+        </section>
+
+        <section id="mInboxView" class="m-view" data-view="inbox">
+          <div class="m-empty-state">
+            <div class="m-empty-icon">✎</div>
+            <p>灵感收件箱</p>
+            <p class="m-empty-hint">长按卡片归档 / 滑动操作。<br />正在搭建中。</p>
+          </div>
+        </section>
+
+        <section id="mLibraryView" class="m-view" data-view="library">
+          <div class="m-empty-state">
+            <div class="m-empty-icon">▦</div>
+            <p>设定资料库</p>
+            <p class="m-empty-hint">模块顶部横滑 + 资料卡列表。<br />正在搭建中。</p>
+          </div>
+        </section>
+
+        <section id="mMoreView" class="m-view" data-view="more">
+          <div class="m-list">
+            <button class="m-list-item" data-target="books">
+              <span class="m-list-icon">▤</span>
+              <span class="m-list-label">书库</span>
+              <span class="m-list-chevron">›</span>
+            </button>
+            <button class="m-list-item" data-target="relation">
+              <span class="m-list-icon">☷</span>
+              <span class="m-list-label">关系图谱</span>
+              <span class="m-list-chevron">›</span>
+            </button>
+            <button class="m-list-item" data-target="api">
+              <span class="m-list-icon">⚙</span>
+              <span class="m-list-label">AI 接口设置</span>
+              <span class="m-list-chevron">›</span>
+            </button>
+            <button class="m-list-item" data-target="backup">
+              <span class="m-list-icon">⇅</span>
+              <span class="m-list-label">导入 / 导出备份</span>
+              <span class="m-list-chevron">›</span>
+            </button>
+            <button class="m-list-item" data-target="settings">
+              <span class="m-list-icon">⌥</span>
+              <span class="m-list-label">设置 / 日志</span>
+              <span class="m-list-chevron">›</span>
+            </button>
+          </div>
+          <div class="m-version">墨匣 · 移动版 v0.1.0</div>
+        </section>
+      </main>
+
+      <nav class="m-tabbar" aria-label="底部导航">
+        <button class="m-tab active" data-view="workspace" type="button">
+          <span class="m-tab-icon" aria-hidden="true">⌘</span>
+          <span class="m-tab-label">工作台</span>
+        </button>
+        <button class="m-tab" data-view="writing" type="button">
+          <span class="m-tab-icon" aria-hidden="true">¶</span>
+          <span class="m-tab-label">写作</span>
+        </button>
+        <button class="m-tab" data-view="inbox" type="button">
+          <span class="m-tab-icon" aria-hidden="true">✎</span>
+          <span class="m-tab-label">收件箱</span>
+        </button>
+        <button class="m-tab" data-view="library" type="button">
+          <span class="m-tab-icon" aria-hidden="true">▦</span>
+          <span class="m-tab-label">资料</span>
+        </button>
+        <button class="m-tab" data-view="more" type="button">
+          <span class="m-tab-icon" aria-hidden="true">···</span>
+          <span class="m-tab-label">更多</span>
+        </button>
+      </nav>
+    </div>
+
+    <div id="mToast" class="m-toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
