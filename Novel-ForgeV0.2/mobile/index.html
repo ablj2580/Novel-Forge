@@ -11,7 +11,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>墨匣 · 移动版</title>
-    <link rel="stylesheet" href="styles.css" />
+    <!-- 用绝对路径,避免 in-app 浏览器(微信/QQ/小红书 等)在 /mobile 无尾斜杠时把相对路径解析到根目录 -->
+    <link rel="stylesheet" href="/mobile/styles.css" />
   </head>
   <body>
     <!-- 左侧抽屉(从左滑出)+ 遮罩 -->
@@ -107,31 +108,33 @@
           </div>
         </section>
 
+        <section id="mBooksView" class="m-view" data-view="books"></section>
+
         <section id="mMoreView" class="m-view" data-view="more">
           <div class="m-list">
-            <button class="m-list-item" data-target="books">
+            <button class="m-list-item" data-action="goto-books" type="button">
               <span class="m-list-icon">▤</span>
               <span class="m-list-label">书库</span>
               <span class="m-list-chevron">›</span>
             </button>
-            <button class="m-list-item" data-target="relation">
-              <span class="m-list-icon">☷</span>
-              <span class="m-list-label">关系图谱</span>
-              <span class="m-list-chevron">›</span>
-            </button>
-            <button class="m-list-item" data-target="api">
+            <button class="m-list-item" data-action="open-api-form" type="button">
               <span class="m-list-icon">⚙</span>
               <span class="m-list-label">AI 接口设置</span>
               <span class="m-list-chevron">›</span>
             </button>
-            <button class="m-list-item" data-target="backup">
-              <span class="m-list-icon">⇅</span>
-              <span class="m-list-label">导入 / 导出备份</span>
+            <button class="m-list-item" data-action="export-data" type="button">
+              <span class="m-list-icon">⇩</span>
+              <span class="m-list-label">导出备份</span>
               <span class="m-list-chevron">›</span>
             </button>
-            <button class="m-list-item" data-target="settings">
+            <button class="m-list-item" data-action="trigger-import" type="button">
+              <span class="m-list-icon">⇧</span>
+              <span class="m-list-label">导入备份</span>
+              <span class="m-list-chevron">›</span>
+            </button>
+            <button class="m-list-item" data-action="open-logs" type="button">
               <span class="m-list-icon">⌥</span>
-              <span class="m-list-label">设置 / 日志</span>
+              <span class="m-list-label">系统日志</span>
               <span class="m-list-chevron">›</span>
             </button>
           </div>
@@ -163,8 +166,35 @@
       </nav>
     </div>
 
+    <!-- Sheet:全屏 / 半屏滑出层(表单 / 详情 / 设置 ...) -->
+    <div id="mSheetBackdrop" class="m-sheet-backdrop" aria-hidden="true"></div>
+    <aside id="mSheet" class="m-sheet" aria-hidden="true" role="dialog" aria-modal="true">
+      <header class="m-sheet-header">
+        <button id="mSheetClose" class="m-icon-button" type="button" aria-label="关闭">×</button>
+        <h2 id="mSheetTitle" class="m-sheet-title">标题</h2>
+        <button id="mSheetAction" class="m-sheet-action" type="button"></button>
+      </header>
+      <div id="mSheetBody" class="m-sheet-body"></div>
+      <footer id="mSheetFooter" class="m-sheet-footer" hidden></footer>
+    </aside>
+
+    <!-- 确认对话框(居中) -->
+    <div id="mConfirmBackdrop" class="m-confirm-backdrop" aria-hidden="true">
+      <div class="m-confirm" role="alertdialog" aria-modal="true">
+        <h3 id="mConfirmTitle" class="m-confirm-title">确认</h3>
+        <p id="mConfirmMessage" class="m-confirm-message"></p>
+        <div class="m-confirm-actions">
+          <button id="mConfirmCancel" class="m-btn m-btn-ghost" type="button">取消</button>
+          <button id="mConfirmOk" class="m-btn m-btn-primary" type="button">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 隐藏文件输入,用于导入备份 -->
+    <input id="mImportFile" type="file" accept="application/json,.json" hidden />
+
     <div id="mToast" class="m-toast" role="status" aria-live="polite"></div>
 
-    <script type="module" src="src/main.js"></script>
+    <script type="module" src="/mobile/src/main.js"></script>
   </body>
 </html>

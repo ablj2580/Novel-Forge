@@ -29,11 +29,14 @@ const server = http.createServer((req, res) => {
   if (safePath === path.sep || safePath === "/") {
     safePath = "index.html";
   }
-  // 移动端入口 -> mobile/index.html(/mobile、/mobile/ 都接受)
-  else if (
-    safePath === "/mobile" || safePath === "/mobile/" ||
-    safePath === path.sep + "mobile" || safePath === path.sep + "mobile" + path.sep
-  ) {
+  // 移动端入口:/mobile 必须 301 到 /mobile/,否则浏览器会以根目录为基准解析相对路径
+  else if (safePath === "/mobile" || safePath === path.sep + "mobile") {
+    res.writeHead(301, { Location: "/mobile/" });
+    res.end();
+    return;
+  }
+  // /mobile/ -> mobile/index.html
+  else if (safePath === "/mobile/" || safePath === path.sep + "mobile" + path.sep) {
     safePath = path.join("mobile", "index.html");
   }
   const filePath = path.join(root, safePath);

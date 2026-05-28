@@ -6,10 +6,24 @@
     <meta name="theme-color" content="#f7f3ea" />
     <title>墨匣 | 小说创意整理台</title>
     <link rel="stylesheet" href="styles.css" />
+    <script>
+      (function() {
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        var screenWidth = window.innerWidth || document.documentElement.clientWidth;
+        
+        if (isMobile || screenWidth < 768) {
+          if (!window.location.pathname.startsWith('/mobile/')) {
+            window.location.href = '/mobile/';
+          }
+        }
+      })();
+    </script>
   </head>
   <body>
+    <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+    <button id="sidebarToggle" class="mobile-toggle" aria-label="打开侧边栏"></button>
     <div class="app-shell">
-      <aside class="sidebar" aria-label="主导航">
+      <aside id="sidebar" class="sidebar" aria-label="主导航">
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">墨</div>
           <div>
@@ -370,6 +384,35 @@
     </dialog>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    
+    <script>
+      (function() {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        
+        function openSidebar() {
+          sidebar.classList.add('open');
+          sidebarBackdrop.classList.add('show');
+          document.body.style.overflow = 'hidden';
+        }
+        
+        function closeSidebar() {
+          sidebar.classList.remove('open');
+          sidebarBackdrop.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+        
+        sidebarToggle?.addEventListener('click', openSidebar);
+        sidebarBackdrop?.addEventListener('click', closeSidebar);
+        
+        const sidebarLinks = sidebar?.querySelectorAll('.nav-item, .book-select-item, .sidebar-footer button');
+        sidebarLinks?.forEach(link => {
+          link.addEventListener('click', closeSidebar);
+        });
+      })();
+    </script>
+    
     <script type="module" src="src/main.js"></script>
   </body>
 </html>

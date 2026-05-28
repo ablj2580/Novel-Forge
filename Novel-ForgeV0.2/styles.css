@@ -541,6 +541,8 @@ mark {
 .view { display: none; }
 .view.active { display: block; }
 
+.mobile-toggle { display: none; }
+
 /* ---------- 6. 统一面板 / 卡片 / 标题 ----------------------------------- */
 
 /* 所有 panel 共享同一基础骨架 */
@@ -2318,6 +2320,314 @@ input.chapter-title:focus {
 
 /* ---------- 18. 响应式 -------------------------------------------------- */
 
+@media screen and (max-width: 1400px) {
+  :root {
+    --sidebar-w: 240px;
+    --main-pad: var(--sp-5);
+  }
+  
+  .main {
+    padding-top: var(--sp-5);
+    padding-bottom: var(--sp-7);
+  }
+  
+  .search-container {
+    width: min(32vw, 360px);
+  }
+  
+  .workspace-grid {
+    gap: var(--sp-4);
+  }
+  
+  .writing-layout {
+    grid-template-columns: 180px minmax(0, 1fr) 240px;
+    gap: var(--sp-4);
+  }
+  
+  .library-layout {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+  
+  .split-layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+  
+  .books-layout {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  :root {
+    --sidebar-w: 220px;
+  }
+  
+  body {
+    font-size: var(--fs-13);
+  }
+  
+  .writing-layout {
+    grid-template-columns: 160px minmax(0, 1fr) 220px;
+    gap: var(--sp-3);
+  }
+  
+  .library-layout {
+    grid-template-columns: 160px minmax(0, 1fr);
+  }
+  
+  .search-container {
+    width: min(280px, 40vw);
+  }
+  
+  .topbar h1 {
+    font-size: var(--fs-26);
+  }
+  
+  .panel-heading h2 {
+    font-size: var(--fs-18);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  :root {
+    --sidebar-w: 200px;
+    --main-pad: var(--sp-4);
+  }
+  
+  body {
+    font-size: var(--fs-13);
+  }
+  
+  .main {
+    padding-top: var(--sp-4);
+    padding-bottom: var(--sp-6);
+  }
+  
+  .writing-layout {
+    grid-template-columns: 140px minmax(0, 1fr) 200px;
+    gap: var(--sp-3);
+  }
+  
+  .library-layout {
+    grid-template-columns: 140px minmax(0, 1fr);
+  }
+  
+  .split-layout {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+  
+  .books-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+  
+  .search-container {
+    width: min(260px, 40vw);
+  }
+  
+  .topbar h1 {
+    font-size: var(--fs-24);
+  }
+  
+  .stat-card strong {
+    font-size: var(--fs-28);
+  }
+  
+  .book-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
+@media screen and (max-width: 900px) {
+  :root {
+    --sidebar-w: 180px;
+  }
+  
+  body {
+    font-size: var(--fs-12);
+  }
+  
+  .workspace-grid {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: var(--sp-4);
+  }
+  
+  .writing-layout {
+    grid-template-columns: 120px minmax(0, 1fr) 180px;
+    gap: var(--sp-2);
+  }
+  
+  .library-layout {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+  
+  .split-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+  
+  .books-layout {
+    grid-template-columns: minmax(0, 1fr) 240px;
+  }
+  
+  .search-container {
+    width: min(240px, 35vw);
+  }
+  
+  .topbar h1 {
+    font-size: var(--fs-22);
+  }
+  
+  .panel-heading h2 {
+    font-size: var(--fs-16);
+  }
+  
+  .stat-card strong {
+    font-size: var(--fs-24);
+  }
+  
+  .book-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  
+  .book-card {
+    grid-template-rows: 100px 1fr;
+  }
+  
+  .book-cover {
+    font-size: var(--fs-32);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(84%, 320px);
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+    box-shadow: 8px 0 32px rgba(60, 42, 22, 0.18);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 199;
+    background: rgba(28, 22, 18, 0.42);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.32s ease, visibility 0s 0.32s;
+  }
+  
+  .sidebar-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.32s ease;
+  }
+  
+  .main {
+    padding: var(--sp-3);
+    padding-top: 56px;
+  }
+  
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--paper-0);
+    background-image:
+      radial-gradient(rgba(120, 90, 50, 0.05) 1px, transparent 1px),
+      radial-gradient(rgba(120, 90, 50, 0.04) 1px, transparent 1px);
+    background-size: 6px 6px, 11px 11px;
+    padding: var(--sp-2) var(--sp-3);
+    margin-bottom: 0;
+    box-shadow: 0 2px 8px rgba(60, 42, 22, 0.06);
+  }
+  
+  .topbar::after {
+    display: none;
+  }
+  
+  .topbar h1 {
+    font-size: var(--fs-20);
+  }
+  
+  .topbar-actions {
+    gap: var(--sp-2);
+  }
+  
+  .search-container {
+    width: min(220px, 45vw);
+  }
+  
+  .search-container input {
+    font-size: var(--fs-12);
+  }
+  
+  .mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-2);
+    background: var(--paper-3);
+    border: 1px solid var(--rule-0);
+    color: var(--ink-2);
+    font-size: var(--fs-16);
+    cursor: pointer;
+    position: fixed;
+    top: var(--sp-3);
+    left: var(--sp-3);
+    z-index: 101;
+    transition: background 0.18s ease;
+  }
+  
+  .mobile-toggle:hover {
+    background: var(--seal-soft);
+    border-color: var(--seal);
+    color: var(--seal);
+  }
+  
+  .mobile-toggle::before {
+    content: "☰";
+  }
+  
+  .workspace-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: var(--sp-3);
+  }
+  
+  .writing-layout {
+    grid-template-columns: 100px minmax(0, 1fr) 160px;
+    gap: var(--sp-2);
+  }
+  
+  .library-layout {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+  
+  .split-layout {
+    grid-template-columns: minmax(0, 1fr) 240px;
+  }
+  
+  .books-layout {
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+}
+
 /* ---------- 19. 沉浸写作模式 (#focusView .focus-mode) ----------------- */
 
 /* 写作编辑器右上角的 ⛶ 入口按钮 */
@@ -3489,79 +3799,6 @@ input.chapter-title:focus {
   color: var(--ink-3);
   text-align: center;
   letter-spacing: 0.06em;
-}
-
-/* ---------- 21. 响应式 -------------------------------------------------- */
-
-@media (max-width: 1240px) {
-  .workspace-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .capture-panel { grid-column: 1; grid-row: auto; }
-  .stats-panel   { grid-column: 1; grid-row: auto; }
-  .review-panel  { grid-column: 1; grid-row: auto; }
-  .timeline-panel{ grid-column: 1; grid-row: auto; }
-
-  .books-layout,
-  .split-layout,
-  .library-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .book-detail-panel,
-  .detail-panel { position: static; max-height: none; }
-
-  .writing-layout {
-    grid-template-columns: 220px minmax(0, 1fr);
-    grid-template-rows: auto auto;
-    height: auto;
-  }
-  .reference-panel { grid-column: 1 / -1; min-height: 300px; }
-}
-
-@media (max-width: 1024px) {
-  .app-shell {
-    grid-template-columns: 1fr;
-  }
-  .sidebar {
-    position: static;
-    height: auto;
-    box-shadow: none;
-    border-right: 0;
-    border-bottom: 1px solid var(--rule-0);
-  }
-  .nav-list {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  }
-  .sidebar-footer {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .writing-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .chapter-list-panel,
-  .reference-panel { min-height: 260px; }
-}
-
-@media (max-width: 720px) {
-  :root { --main-pad: var(--sp-4); }
-  .topbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--sp-3);
-  }
-  .topbar h1 { font-size: var(--fs-26); }
-  .topbar-actions { flex-wrap: wrap; }
-  .search-container { width: 100%; }
-  .stats-panel { grid-template-columns: minmax(0, 1fr); }
-  .stat-card + .stat-card { border-left: 0; border-top: 1px solid var(--rule-2); }
-  .stat-card:nth-child(n + 3) { border-top: 1px solid var(--rule-2); }
-  .book-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .book-stats .stat-item:nth-child(2n) { border-left: 1px solid var(--rule-2); }
-  .book-stats .stat-item:nth-child(n + 3) { border-top: 1px solid var(--rule-2); }
-  .book-stats .stat-item:nth-child(2n+1) { border-left: 0; }
-  .nav-grid { grid-template-columns: minmax(0, 1fr); }
-  .form-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* 模态对话框 */

@@ -1,10 +1,5 @@
 /**
- * 移动端 DOM 引用集合 (类似桌面的 src/dom.js)
- *
- * 为什么独立一份:
- *   - 移动端 HTML 类名都以 .m- 前缀,选择器和桌面不重叠
- *   - 桌面端 src/dom.js 引用的元素在移动端不存在(.app-shell、.sidebar 等)
- *   - 模块导出后,移动端 render.js / main.js 统一从这里拿引用
+ * 移动端 DOM 引用集合
  */
 
 export const mDom = {
@@ -28,6 +23,7 @@ export const mDom = {
   writingView:   document.getElementById('mWritingView'),
   inboxView:     document.getElementById('mInboxView'),
   libraryView:   document.getElementById('mLibraryView'),
+  booksView:     document.getElementById('mBooksView'),
   moreView:      document.getElementById('mMoreView'),
 
   // 反馈
@@ -40,5 +36,24 @@ export const mDom = {
   drawerItems:      document.querySelectorAll('.m-drawer-item'),
   drawerNewBook:    document.getElementById('mDrawerNewBook'),
   drawerBookList:   document.getElementById('mDrawerBookList'),
-  drawerFooterBtns: document.querySelectorAll('.m-drawer-footer .m-drawer-action')
+  drawerFooterBtns: document.querySelectorAll('.m-drawer-footer .m-drawer-action'),
+
+  // Sheet
+  sheet:          document.getElementById('mSheet'),
+  sheetBackdrop:  document.getElementById('mSheetBackdrop'),
+  sheetClose:     document.getElementById('mSheetClose'),
+  sheetTitle:     document.getElementById('mSheetTitle'),
+  sheetAction:    document.getElementById('mSheetAction'),
+  sheetBody:      document.getElementById('mSheetBody'),
+  sheetFooter:    document.getElementById('mSheetFooter'),
+
+  // Confirm
+  confirmBackdrop: document.getElementById('mConfirmBackdrop'),
+  confirmTitle:    document.getElementById('mConfirmTitle'),
+  confirmMessage:  document.getElementById('mConfirmMessage'),
+  confirmCancel:   document.getElementById('mConfirmCancel'),
+  confirmOk:       document.getElementById('mConfirmOk'),
+
+  // 导入文件
+  importFile:     document.getElementById('mImportFile')
 };
